@@ -1,0 +1,14 @@
+---
+- name: "création de la base de données wikimedia"
+  mysql_db:
+    name: "{{mediawiki_db_name}}"
+    state: present
+
+- name: "Création userdb et attribution des droits"
+  mysql_user:
+    name: "{{mediawiki_db_user}}"
+    password: "{{mediawiki_db_password}}"
+    priv: "{{mediawiki_db_name}}.*:ALL,GRANT"
+    host: "{{item}}"
+    state: present
+  with_items: "{{groups.apache}}"
